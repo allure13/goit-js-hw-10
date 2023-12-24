@@ -45,7 +45,6 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-// Додати обробник подій для кнопки "Start"
 document.querySelector('[data-start]').addEventListener('click', function () {
   const selectedDate = flatpickrInstance.selectedDates[0];
   const currentTime = Date.now();
@@ -54,13 +53,14 @@ document.querySelector('[data-start]').addEventListener('click', function () {
   const timerInterval = setInterval(function () {
     const { days, hours, minutes, seconds } = convertMs(timeDifference);
 
-    // Оновити інтерфейс таймера
-    document.querySelector('[data-days]').textContent = addLeadingZero(days);
-    document.querySelector('[data-hours]').textContent = addLeadingZero(hours);
+    document.querySelector('[data-days]').textContent =
+      days >= 0 ? addLeadingZero(days) : '00';
+    document.querySelector('[data-hours]').textContent =
+      hours >= 0 ? addLeadingZero(hours) : '00';
     document.querySelector('[data-minutes]').textContent =
-      addLeadingZero(minutes);
+      minutes >= 0 ? addLeadingZero(minutes) : '00';
     document.querySelector('[data-seconds]').textContent =
-      addLeadingZero(seconds);
+      seconds >= 0 ? addLeadingZero(seconds) : '00';
 
     if (timeDifference <= 0) {
       clearInterval(timerInterval);
@@ -74,7 +74,10 @@ document.querySelector('[data-start]').addEventListener('click', function () {
   }, 1000);
 });
 
-// Функція для додавання нуля, якщо число менше 10
 function addLeadingZero(value) {
   return value < 10 ? `0${value}` : value;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelector('[data-start]').disabled = true;
+});
